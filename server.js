@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {};
+projectData = [];
 
 // Require Express to run server and routes
 const express = require('express');
@@ -22,26 +22,27 @@ app.use(morgan('tiny'));
 // Initialize the main project folder
 app.use(express.static('website'));
 
-
 //# Get Requests
-app.get('/allData', (req , res) => {
-    res.send(projectData);
+app.get('/allData', (req, res) => {
+  res.send(projectData);
 });
 
 //# Post Requests
 app.post('/addData', (req, res) => {
-    let newEntry = request.body;
+  let newEntry = {
+    date: req.body.date,
+    temp: req.body.temp,
+    content: req.body.content,
+  };
 
-    projectData['date'] = newEntry.date;
-    projectData['temp'] = newEntry.temp;
-    projectData['feel'] = newEntry.feeling;
-
-    res.send(projectData);
-})
-
+  projectData.push(newEntry);
+  res.send(projectData);
+});
 
 // Setup Server
 
-const port = process.env.port || 3000 ;
+const port = process.env.port || 3000;
 
-app.listen(port, () => console.log(`your app running at http://localhost:${port}`));
+app.listen(port, () =>
+  console.log(`your app running at http://localhost:${port}`)
+);
